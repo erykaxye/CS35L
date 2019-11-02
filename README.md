@@ -1,6 +1,6 @@
 # CS35L
 
-A collection of my projects from UCLA CS35L 
+A collection of my projects from UCLA CS35L for Winter 2019
 
 Lab 1: 98/100
 Lab 2: 92.84/100 
