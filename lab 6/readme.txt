@@ -1,0 +1,47 @@
+Erica Xie
+404920875
+Lab 7
+
+After Action Report
+
+I forgot to export the new version of sort, so mine didn't even pass the
+make clean check. But after I did that my code seemed to work. 
+
+$ make clean check
+rm -f *.o *.tmp 1-test.ppm 2-test.ppm 4-test.ppm 8-test.ppm srt srt.tgz
+gcc -std=gnu11 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o main.o main.c
+gcc -std=gnu11 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o raymath.o raymath.c
+gcc -std=gnu11 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread   -c -o shaders.o shaders.c
+gcc -std=gnu11 -g -O2 -Wall -Wextra -Wno-unused-parameter -lpthread -o srt main.o raymath.o shaders.o -lm
+time ./srt 1-test.ppm >1-test.ppm.tmp
+
+real    0m48.141s
+user    0m48.144s
+sys     0m0.002s
+mv 1-test.ppm.tmp 1-test.ppm
+time ./srt 2-test.ppm >2-test.ppm.tmp
+
+real    0m24.476s
+user    0m48.658s
+sys     0m0.006s
+mv 2-test.ppm.tmp 2-test.ppm
+time ./srt 4-test.ppm >4-test.ppm.tmp
+
+real    0m12.270s
+user    0m48.351s
+sys     0m0.002s
+mv 4-test.ppm.tmp 4-test.ppm
+time ./srt 8-test.ppm >8-test.ppm.tmp
+
+real    0m6.550s
+user    0m50.734s
+sys     0m0.002s
+mv 8-test.ppm.tmp 8-test.ppm
+for file in 1-test.ppm 2-test.ppm 4-test.ppm 8-test.ppm; do \
+  diff -u baseline.ppm $file || exit; \
+  done
+
+
+It seems that everytime the number of threads was doubled, the time was
+halved. This proves that parallelism greatly improves our program's run
+times.  

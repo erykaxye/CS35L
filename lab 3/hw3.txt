@@ -1,0 +1,40 @@
+#Name: Erica Xie
+#ID: 404920875 
+#Lab 7 
+
+Q1. The performance of ls is better now because the patch removed an 
+if statement so there's less lines of code to execute and now -A is 
+also always overiding -a which fixes the bug that was previously in 
+the ls code.   
+
+Q2. If your company adopts this patched version, you have to watch out for 
+order of the flags becuase now -A and -a override each other depending
+on the order they are given. 
+
+Q3. If I run randline.py on /dev/null, it outputs this error message: 
+
+Traceback (most recent call last):
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/lib64/python2.6/random.py", line 261, in choice
+    return seq[int(self.random() * len(seq))]  
+    # raises IndexError if seq is empty
+IndexError: list index out of range
+
+This is because it is trying to find a line in a file, but there is 
+nothing in the file to find so it throws an IndexError. 
+
+Q4. When I run randline.py on python3, I get this error. 
+
+  File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+This is because python3 doesn't support tuples, so the correct syntax is
+except IOError as err. 
+

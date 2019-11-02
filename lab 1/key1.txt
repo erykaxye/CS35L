@@ -1,0 +1,74 @@
+Exercise 1.1: Moving around in Emacs
+1. e m a c s SP e x e r 1 . h t m l ENTER
+2. C-M-s H T M L ENTER
+3. C-M-s s c a v e n g e r C-r ENTER
+4. C-M-s s e l f - r e f e r e t i a l C-r ENTER
+5. C-M-s a r r o w C-r ENTER 
+6. C-e
+7. C-a
+10. C-x C-c
+
+Exercise 1.2 Deleting text in Emacs
+1. e m a c s SP e x e r 2 . h t m l ENTER
+2. M-g g 1 8 M-h C-w
+3. C-M-s D E C-a C-k
+4. C-M-s h t t p s : / / e C-s M-h C-w
+5. C-M-s < ! C-r M-z > C-M-s < ! C-r M-h C-w C-M-s < ! C-r C-k
+
+Excercise 1.3 Inserting text in Emacs
+1. e m a c s SP e x e r 3 . h t m l ENTER
+2. C-M-s 1 C-s C-r M-% 1 ENTER 42 ENTER SPC n SPC C-g
+3. C-M-s U T F - 8 M-% U S - A S C I I ENTER SPC ^
+4. C-M-s [ ^ [ : a s c i i : ] ] M-h C-w
+5. C-M-s < / o C-e C-o
+6. C-x C-s C-x C-c
+
+Excercise 1.4: Other editing tasks in Emacs
+1. c a t SP e x e r 2 . h t m l SP e x e r 2 . d i f f SP >e x e r 4 . h t m l ENTER
+2. e m a c s SP e x e r 4 . h t m l ENTER 
+3. M-> M-h C-f M-w M-g g 3 9 5 ENTER C-y
+4. M-> C-M-r < ! C-r M-h C-n C-f M-w M-g g 3 8 1 ENTER C-y C-p C-d C-p C-d C-p C-d 
+M-> C-M-r < ! C-r C-r C-SPC C-M-s > C-s C-s M-w M-< C-M-s o u t p u t SPC n o t h i n g ENTER C-y 
+M-> C-M-r < ! C-r C-r C-r C-SPC C-M-s > C-s M-w M-g g 3 3 8 C-y C-p C-d C-p C-d
+M-> C-M-r < ! C-r C-r C-r C-r C-SPC C-M-s > M-w M-g g 1 2 5 C-y
+M-> C-M-r < ! C-r C-r C-r C-r C-r C-SPC C-M-s > M-w M-g g 18 C-y ENTER ENTER
+5. M-> C-M-s - - - C-s C-r C-SPC M-> C-w C-y - - > C-M-s - - - C-s C-s C-r C-SPC < !
+7 instances 
+8. M-< M-% < o l > ENTER < o L > SPC SPC SPC SPC SPC SPC SPC 
+9. C-x C-s C-x C-c d i f f   - u   e x e r 1 . h t m l   e x e r 4 . h t m l   > e x e r 4 . d i f f
+ 
+Excercise 1.5: Doing commands in Emacs
+e m a c s ENTER
+M-x m a k e - d i r e c t o r y ENTER j u n k ENTER
+C-x C-f h e l l o . c ENTER
+C-c C-v
+M-x c o m p i l e ENTER g c c  h e l l o . c ENTER
+C-h b h e l l o - o u t ENTER
+C-u M-! . / a . o u t ENTER
+C-SPC M-> M-w C-y
+#include <stdio.h>
+int
+main (void)
+{
+  char n = '\n', b = '\\', q = '"';
+  char const *p = "#include <stdio.h>%cint%cmain (void)%c{%c  char n = '%cn', b = '%c%c', q = '%c';%c  char const *p = %c%s%c;%c  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  printf (p, n, n, n, n, b, b, b, q, n, q, p, q, n, n, n, n);
+  return 0;
+}
+
+Excercise 1.6: Running Elisp code
+1. C-x b ENTER 
+2. random "404-920-875" C-j 
+-517124155566264784
+3. (setq x (random)) C-j 
+886247982091461831 
+(setq y (random)) C-j 
+207638329860238115 
+4. (* x y) 
+-1291761671654165451 
+The result is the opposite sign (negative) when it is supposed to be a large positive number. The result has the opposite sign because of overflow because the system can only calculate values from -2^29 to 2^29-1. 
+5. M-: (* x y) ENTER 
+-1291761671654165451 (#o270225731521245532065, #x2e12bd9a8a96b435)
+The output also has the correct number in octal and hex. 
+6. The two random integers are not truly random in the mathematical sense because every number given by a computer is calculated with an already programmed formula. However, what is random about this is that you can seed the function with different numbers and get different numbers for different seeds, but the same number from the same seed. 
+7. P(incorrect) = 1 - ((sum(n = 0 -> n= 30) 2^x*2^(30-x))/2^60) The function random can give a result from -2^29 to 2^29-1 which is 30 bits long (first bit is reserved for sign bit). The max product is 2^60. (2^x)*2^(30-x) is the numerator so that the numbertor can't be more than 2^30. 

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#takes all the english and hawaiian words between the pattern
+egrep '<td>.+</td>' hwordsweb.html |
+
+#deletes every other line which deletes english
+sed '1~2d' |
+
+#gets rid of all html tags
+sed 's/<[^>]*>//g' | 
+
+#converts ` to ' 
+sed "s/\`/\'/g" | 
+
+#makes everything lowercase
+tr '[:upper:]' '[:lower:]' | 
+
+#separate words in a sentence
+sed 's/ /\n/g' |
+sed 's/,/\n/g' |
+
+#gets rid of tabs
+#tr -d '[:blank:]' |
+
+#gets rid of extra spaces
+sed "/^$/d" | 
+
+#check that theres no non hawaiian characters
+sed "/[^pk\'mnwlhaeiou\n]/d" | 
+
+#gets rid of duplicates
+sort -u > hwords
+
+#takes from the webapage
+#wget "http://mauimapp.com/moolelo/hwnwdseng.htm" |

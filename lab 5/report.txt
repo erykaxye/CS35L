@@ -1,0 +1,126 @@
+Name: Erica Xie
+ID: 404920875
+Lab 7 
+
+Lab: 
+
+1. tr2b.c getchar putchar
+
+First I checked the number of arguments was 3. 
+Then I compared the length of the from input to the to input.
+Then I realized that to convert the characters in from to the characters
+in to, I had to create a map. 
+Since there's no map function in c, I created an array of 256 characters
+which represents each of the ASCII characters. 
+Then for each from index of the map, I put the to character there. If 
+there was already a to character there, I threw an error for from 
+duplicates. 
+Then I entered into a while loop that uses getchar to read the input
+byte by byte until the end of the file. As I read each byte, I check if 
+that character has a matching to character in the map. If it did then I 
+changed the character to the matching to character and used putchar to 
+output it.  
+I used the same file error function as I did for sfrob.c.  
+
+
+
+2. tr2u.c read write 
+
+In this function, I copied what I did for tr2b.c, but I had to add a buf
+variable for read and write to use. 
+First I read from stdin using read(0, buf, 1) and then while the input was
+greater than 0, meaning if it wasn't end of the file, then I would map 
+to the correct character and print it using write. Then I would check 
+again for read to update the input variable. 
+
+
+
+3. strace 
+
+To create a large file we use 
+$ head --bytes=5000000 /dev/urandom > large.txt
+
+(a) to test this by copying to a file, we use: 
+$ strace -c ./tr2b 'ab' 'xy' < large.txt > tr2bout.txt
+
+There were 182 system calls. 
+
+$ strace -c ./tr2u 'ab' 'xy' < large.txt > tr2uout.txt
+
+There were 10000024 system calls. 
+This shows that tr2b is faster than tr2u with less system calls and 
+the strace program took over 2 minutes for tr2u.  
+
+(b) to test this on our terminal, we don't input to a file 
+$ strace -c ./tr2b 'ab' 'xy' < large.txt 
+
+$ strace -c ./tr2u 'ab' 'xy' < large.txt 
+
+I tried to use both of these commands but it froze and crashed my terminal.
+But it definately took a longer time for tr2u to finish than for tr2b to
+crash putty. 
+
+
+
+4. time 
+
+(a) to test this by copying to a file, we use:
+$ time ./tr2b 'ab' 'xy' < large.txt > tr2bout2.txt
+
+real    0m0.329s
+user    0m0.259s
+sys     0m0.003s
+
+$ time ./tr2u 'ab' 'xy' < large.txt > tr2uout2.txt
+
+real    0m8.070s
+user    0m1.086s
+sys     0m6.918s
+
+This shows that tr2b is faster.
+
+(b) to test this on our terminal, we don't input to a file
+$ time ./tr2b 'ab' 'xy' < large.txt 
+
+$ time ./tr2u 'ab' 'xy' < large.txt 
+
+I tried to use both of these commands but it froze and crashed my terminal.
+But it definately took a longer time for tr2u to finish than for tr2b to
+crash putty. 
+
+
+
+Homework 
+
+Using the time command on sfrobu, sfrobu -f, sfrobs, sfrobs -f, sfrob
+using large files.  
+
+$ time ./sfrobu < large.txt > sfrobuout.txt
+
+real    0m8.601s
+user    0m1.318s
+sys     0m7.190s
+$ time ./sfrobu -f < large.txt > sfrobuout.txt
+
+real    0m8.327s
+user    0m1.395s
+sys     0m6.865s
+$ time ./sfrobs < large.txt > sfrobuout.txt
+
+real    0m0.145s
+user    0m0.045s
+sys     0m0.020s
+$ time ./sfrobs -f < large.txt > sfrobuout.txt
+
+real    0m0.132s
+user    0m0.039s
+sys     0m0.021s
+
+$ time ./sfrob < large.txt > sfrobuout.txt
+
+real    0m0.480s
+user    0m0.395s
+sys     0m0.012s
+
+We can see that sfrobu is slower than all the rest. This is because
+it uses a lot of system calls to read and write each time. 

@@ -1,0 +1,66 @@
+Erica Xie 
+404920875
+Lab 7 
+
+To see if I had the updated version of GNU sort I ran the command
+$ /usr/local/cs/bin/sort --version
+
+sort (GNU coreutils) 8.24
+Copyright (C) 2015 Free Software Foundation, Inc.
+
+I have a new enough version. 
+
+Then I made sure to append /usr/local/cs/bin to my PATH using 
+
+$ cd /usr/local/cs/bin
+
+Next, I generated a file containing 2^24 random single-precision floating
+point numbers, one per line using the command 
+
+$ cat /dev/urandom | od -t fF -N $(((2**24)*4)) | tr -s ' ' '\n' | 
+sed '/^$/d' > nums.txt
+
+cat /dev/urandom acts like a random number generator 
+od -t fF -N $(((2**24)*4)) makes the bytes from dev/urandom as single
+precision floats with the -f tag as the format and the -N tag as a 
+limit to how many bytes to format  
+tr -s ' ' '\n' replaces all spaces with new lines and separates every 
+number into a new line 
+sed '/^$/d' deletes all the extra spaces or empty lines  
+then I piped it into nums.txt 
+
+To test the speed of sort, I used the command below on nums.txt 
+
+$ time -p /usr/local/cs/bin/sort -g nums.txt > /dev/null 
+real 36.83
+user 201.01
+sys 0.75
+
+Then I tested the sort function with 1, 2, 4, and 8 threads using the 
+--parallel tag 
+
+$ time -p /usr/local/cs/bin/sort -g --parallel=1 nums.txt > /dev/null
+real 191.42
+user 191.04
+sys 0.38
+
+$ time -p /usr/local/cs/bin/sort -g --parallel=2 nums.txt > /dev/null
+real 99.72
+user 189.78
+sys 0.45
+
+$ time -p /usr/local/cs/bin/sort -g --parallel=4 nums.txt > /dev/null
+real 56.64
+user 191.12
+sys 0.58
+
+$ time -p /usr/local/cs/bin/sort -g --parallel=8 nums.txt > /dev/null
+real 38.12
+user 201.24
+sys 0.77
+
+As you add more parallel threads the faster sort works. The time is nearly
+halved as you double the number of threads. The first sort without 
+specifying the number of threads is probably the default optimized number 
+of threads that the server calculates because it sorts in the shortest 
+amount of time. 

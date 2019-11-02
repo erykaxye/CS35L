@@ -1,0 +1,13 @@
+#!/bin/bash 
+
+#finds files which are executable and prints their details 
+find $@ -type f -exec file '{}' \; |
+
+#finds which files are UTF-8
+grep UTF-8 | 
+
+#deletes extra column of file output
+awk '{print $1}'  |
+
+#gets rid of : at the end of each file
+awk '1' RS='.\n'

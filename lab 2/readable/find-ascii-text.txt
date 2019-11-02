@@ -1,0 +1,13 @@
+#!/bin/bash 
+
+#find files that are exectuable in current directory
+find $@ -type f -exec file '{}' \; | 
+
+#find which ones are ascii 
+grep ASCII | 
+
+#deletes extra column of file output 
+awk '{print $1}'  | 
+
+#gets rid of : at the end of each file 
+awk '1' RS='.\n'

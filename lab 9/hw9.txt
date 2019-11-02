@@ -1,0 +1,115 @@
+Erica Xie
+404920875
+Lab 7 
+
+2. 
+Then I cloned the unmodified version of diffutils into a new folder and
+checked out v3.0 like before
+
+$ git clone https://git.savannah.gnu.org/git/diffutils.git diffutils-og
+$ cd diffutils-og/
+$ git checkout v3.0 -b quote
+Switched to a new branch 'quote'
+$ git status
+# On branch quote
+nothing to commit (working directory clean)
+
+
+
+3. To install my change onto this new branch, I ran the following command
+$ patch -p1 < ~/assign9/gitroot/diffutils/quote-3.0-patch.txt
+patching file src/cmp.c
+patching file src/diff.c
+patching file src/diff3.c
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+
+
+
+5. 
+
+$ emacs ChangeLog-2008
+
+Using the Emacs function add-change-log-entry-other-window (C-x 4 a), I 
+composed a ChangeLog entry for my patch. 
+
+2019-03-13  Erica Xie  <ericax@lnxsrv05.seas.ucla.edu>
+
+        * ChangeLog-2008: Changed the following files so that they output '
+        instead of `.
+
+
+        * src/cmp.csrc/cmp.c
+        * src/diff.c
+        * src/diff3.c
+        * src/dir.c
+        * src/sdiff.c
+        * src/util.c
+
+
+
+6. Then I committed my changes to the new branch with the ChangeLog entry 
+as the commit message.
+
+$ git add .
+$ git commit -F ChangeLog
+[quote fe90fdb] 2019-03-13  Erica Xie  <ericax@lnxsrv05.seas.ucla.edu>
+ Committer: Erica Xie <ericax@lnxsrv05.seas.ucla.edu>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+If the identity used for this commit is wrong, you can fix it with:
+
+    git commit --amend --author='Your Name <you@example.com>'
+
+ 7 files changed, 56 insertions(+), 43 deletions(-)
+ create mode 100644 #ChangeLog#
+
+
+
+7. Then I  generated a file formatted-patch.txt. 
+
+$ git format-patch -1 --stdout > formatted-patch.txt
+
+
+
+8. Then I sent my formatted patch to my partner and she sent me hers. I had
+to delete my ChangeLog, but after that the patch worked with the following
+commands: 
+
+$ cd checkout master 
+$ $ git checkout v3.0 -b partner
+$ git am < mich-formatted-patch.txt 
+Applying: 2019-03-13 Michelle C Lam <lamm@lnxsrv06.seas.ucla.edu>
+/u/eng/ugrad/ericax/assign9/gitroot/diffutils-og/.git/rebase-apply/patch:20: trailing whitespace.
+        * CS35L/Lab9/gitroot/diffutils-og/ChangeLog-2008: Inputted entries that
+/u/eng/ugrad/ericax/assign9/gitroot/diffutils-og/.git/rebase-apply/patch:22: trailing whitespace.
+
+/u/eng/ugrad/ericax/assign9/gitroot/diffutils-og/.git/rebase-apply/patch:31: trailing whitespace.
+$ patch -p0 < diffutils-get.diff
+$ ./bootstrap 
+$ make 
+$ make check 
+
+
+
+9. To verify that her ChangeLog entry works, I ran the commands below 
+$ make distdir 
+$ emacs ChangeLog
+
+The ChangeLog was a log of her changes and previous edits to the file.
+
+
+
+10. Then I opened a new session of putty with X11 forwarding enabled and 
+made sure that I had XMing running in the background. 
+
+$ cd ~eggert/src/gnu/emacs
+$ gitk
+ 
+Then I took a screenshot of what I saw and wrote a short description 

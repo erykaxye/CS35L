@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#put the results of finding ASCII files into a string
+FILE_NAMES=`find $@ -type f -exec file '{}' \; | grep ASCII | 
+awk '{print $1}' | awk '1' RS='.\n'`
+
+#parse the string with newlines
+IFS=$'\n'
+
+#make counter varible to iterate through FILES array
+let count=0
+
+#create FILES array
+declare -a FILES
+
+#loops through string and puts each entry into the FILES array
+for i in $FILE_NAMES
+do
+    FILES[$count]=$i
+    let count=$count+1
+done
+
+
+#for each entry in FILES, check if it has the incorrect header
+for j in "${FILES[@]}"
+do
+    if(head -qn1 $j | egrep -xlq "^-\*- coding: utf-8 -\*-?")
+    then
+        echo "$j"
+    fi
+done

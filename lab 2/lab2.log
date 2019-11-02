@@ -1,0 +1,91 @@
+#Name: Erica Xie 
+#ID: 404920875
+#Lab: 7
+
+First, I changed my locale settings using 
+export LC_ALL='C' 
+Then I sorted the contents of the file into my current directory using 
+sort /usr/share/dict/words >words. 
+Then I used 
+wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/assign2.html 
+>assign2.html 
+and then copied it using 
+cp assign2.html.1 assign2.html. 
+
+Then I ran the commands given with text file being standard input 
+tr -c 'A-Za-z' '[\n*]' < assign2.html
+1st command: outputs each word with alphabetical characters in a different 
+line and replaced non alphabet with newlines 
+tr -cs 'A-Za-z' '[\n*]' < assign2.html
+2nd one: outputs each word with alphabetical characters in a different line 
+and deletes non-alphabetical characters because of the added 's'
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort
+3rd one: sorts the outputs of 2nd one in alphabetical orderby piping the out
+put of 2 into the sort command
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u
+4th one: sorts the outputs of 2nd one in alphabetical order without repeats 
+by using the -u extension of sort 
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+5th one: compares the output of 4 to all in the words file by comparing the 
+output to words in the words file  
+tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words
+6th one: deletes the 2nd and 3rd columns of output of 5th command by using
+the -23
+
+
+
+Hawaiian:  
+
+First I used 
+wget http://mauimapp.com/moolelo/hwnwdseng.htm 
+to download the html file with all the english and hawaiian words in it. 
+I worked on the script a section at a time.
+I first used sed to delete the header and the end of the html page, 
+but then I realized it was the wrong approach. 
+So then I used egrep to find all the characters between 
+the tags <td> <\td> which grabbed all the english and hawaiian words. 
+Then I removed all html tags (the rest is in the comments of my code) 
+Lastly, I modified the the crude english checker to check hwords instead. 
+cat assign2.html | tr 'A-Z' 'a-z' |  tr -cs "pk\'mnwlhaeiou" '[\n*]' | 
+sort -u | comm -23 - hwords | wc -w
+The output was 216 words for the Hawaiian checker. 
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words | 
+wc -w
+The output was 87 words for the English checker. 
+Some of the Hawaiian words are not English words, which is why it
+triggered the command. 
+For example, the word 'halau' is Hawaiian but not English on the webpage
+and a bunch of English words are not Hawaiian like dictionary. 
+
+
+buildwords script: 
+
+#!/bin/bash
+
+#takes all the english and hawaiian words between the pattern
+egrep '<td>.+</td>' hwordsweb.html |
+
+#deletes every other line which deletes english
+sed '1~2d' |
+
+#gets rid of all html tags
+sed 's/<[^>]*>//g' |
+
+#converts ` to '
+sed "s/\`/\'/g" |
+
+#makes everything lowercase
+tr '[:upper:]' '[:lower:]' |
+
+#separate words in a sentence
+sed 's/ /\n/g' |
+sed 's/,/\n/g' |
+
+#gets rid of extra spaces
+sed "/^$/d" |
+
+#check that theres no non hawaiian characters
+sed "/[^pk\'mnwlhaeiou\n]/d" |
+
+#gets rid of duplicates and puts into hwords file
+sort -u > hwords

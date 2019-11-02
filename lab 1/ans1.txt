@@ -1,0 +1,75 @@
+1. man -k 
+command: man man 
+to find a list of all man functions and I found the one that did a search. 
+
+2. /usr/bin/mv
+/usr/bin/sh 
+command: which mv 
+which sh 
+
+?3. pr: converts text files for printing  
+tr: translates and deletes a character
+command: man find
+find -name '?r'
+man pr 
+man tr
+
+4. /etc/alternatives/emacs
+command: cd /usr/bin 
+ls -l emacs
+
+?5. gcc (GCC) 8.2.0
+gcc (GCC) 4.8.5 
+They're different programs bc they're in different directories. 
+command: gcc --version
+/usr/bin/gcc --version
+
+6. u+sx means the user can execute the file while setting the Group or user ID, o-w means others cannot write to the file. 
+
+7. 309 directories 
+top 10:  
+.
+./src/bison
+./src/bison/RCS
+./src/grep
+./src/grep/RCS
+./src/ocaml
+./src/ocaml/RCS
+./share/info
+./share/man/man1
+./share/man/man3
+command: find -type d -mtime -28
+find -type d -mtime -28 | wc -l 
+
+8. 253
+command: man wc 
+find -type l | wc -l
+
+9. librom1394.so.0.3.0
+command: man ls
+cd /usr/lib64 
+ls -lta
+
+10. Locale displays the current locale settings for each locale category, settings of environment variables 
+command: man locale 
+
+11. dired-downcase, downcase-region, downcase-word
+command: C-h a d o w n c a s e ENTER
+
+12. C-M-r incrementally searches the file backwards (bottom to top) 
+C-M-s regular expression search 
+C-M-t transpose two expressions
+C-M-u move backward to the outer opening parenthesis
+C-M-v scrolls on another window of emacs 
+command: C-h k <command> to find each command 
+
+13. C-g returns to where the search started if in search mode or quits the entered or running command. 
+command: C-h k C-g
+
+14. yank reinserts text that was previously deleted or killed 
+C-y yanks back last thing killed and M-y replaces last yank with previous kill
+command: C-h a yank
+
+15. ls -l lists less directories because ls -l ignores files that start with ".", but dired just lists whats in a directory including hidden entries.  
+command: ls -l
+C-x C-d

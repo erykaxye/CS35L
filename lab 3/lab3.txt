@@ -1,0 +1,41 @@
+#Name: Erica Xie
+#ID: 404920875
+#Lab 7 
+
+I used wget https://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz to 
+downloard coreutils-8.29 to my home directory. 
+Then I untarred and unzipped it using tar -xJvf coreutils-8.29.tar.xz 
+I then made a directory called coreutilsInstall. 
+Then I went into the coreutils-8.29 directory and ran the command 
+./configure --prefix coreutilsInstall to install into the directory 
+i just made. 
+I compiled it using the make command. 
+I installed it using the make install command. 
+Then I tested if the bug was still there by running the ls -a -A command. 
+I used emacs to open patch_file and copied and pasted the patch content
+given in the assignment. 
+Then I used patch -p1 patch_file 
+I got an error, but my patch still worked. 
+The error was:
+patching file NEWS
+Hunk #1 FAILED at 4.
+1 out of 1 hunk FAILED -- saving rejects to file NEWS.rej
+patching file src/ls.c
+Hunk #1 succeeded at 1900 (offset -3 lines).
+patching file tests/local.mk
+Hunk #1 FAILED at 575.
+1 out of 1 hunk FAILED -- saving rejects to file tests/local.mk.rej
+patching file tests/ls/a-option.sh
+This error occured because I copied in the entire diff file into the 
+patch file instead of only the part that was patched. 
+Then I used the make command to compile, but I did not install. 
+I entered the src directory inside coreutils-8.29 and ran ./ls -aA
+and it worked with the patch. 
+Then I entered coreutilsInstall and tested ./ls -aA in unmodified directory
+and the patch was not applied. 
+Then I did a few more tests on empty directories and hidden files 
+and the modified ls still works correctly, with the added patch of 
+./ls -aA
+
+
+

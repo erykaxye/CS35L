@@ -1,0 +1,159 @@
+Name: Erica Xie 
+ID: 404920875 
+Lab 7 
+
+To download the old version of coreutils as-is to my home directory:  
+$ wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/
+coreutils-with-bug.tar.gz 
+
+Then I untarred and unzipped it using: 
+$ tar -xzvf coreutils-with-bug.tar.gz
+
+I then made a directory called coreutilsOld.
+
+Then I went into the coreutils-with-bug directory and ran the command
+$ ./configure --prefix=/u/eng/ugrad/ericax/coreutilsOld 
+to install into the directory i just made.
+
+I compiled it using the make command.
+
+I tried to install it using the make install command, but there was an error
+
+if gcc -DHAVE_CONFIG_H -DLIBDIR=\"/u/eng/ugrad/ericax/coreutilsOld/lib\" -I. -I. -I..  -I.. -I.   -g -O2 -MT utimecmp.o -MD -MP -MF ".deps/utimecmp.Tpo" -c -o utimecmp.o utimecmp.c; \
+        then mv -f ".deps/utimecmp.Tpo" ".deps/utimecmp.Po"; else rm -f ".deps/utimecmp.Tpo"; exit 1; fi
+In file included from utimecmp.c:41:
+utimens.h:2: error: conflicting types for 'futimens'
+/usr/include/sys/stat.h:374: note: previous declaration of 'futimens' was here
+
+To fix the error, I got the patch from the class website: 
+$ wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/coreutils.diff 
+
+I patched the file with: 
+$ patch -p0 < coreutils.diff
+
+Then I configured using the same command as before.  
+
+Then I used the command make and make install. 
+
+This time, the file compiled because we renamed the function and 
+all the calls to it to coreutils_futimens 
+
+Then I did the commands on the assingment page on ~/coreutilsOld/bin/ls  
+
+$ TZ=UTC0 ~/coreutilsOld/bin/ls -lt --full-time wwi-armistice now now1
+
+and I got the result: 
+-rw-r--r-- 1 ericax engugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 ericax engugrad 0 2019-02-07 23:53:40.261876955 +0000 now1
+-rw-r--r-- 1 ericax engugrad 0 2019-02-07 23:53:31.539517645 +0000 now
+
+This result is wrong because it thinks that the 1918 file was created 
+in the future and therefore is printed first. 
+
+When I ran the commands on the SEASnet server, I got this result 
+
+-rw-r--r-- 1 ericax engugrad 0 2054-12-17 09:28:16.000000000 -0800 wwi-armistice
+-rw-r--r-- 1 ericax engugrad 0 2019-02-05 15:42:07.032489000 -0800 now1
+-rw-r--r-- 1 ericax engugrad 0 2019-02-05 15:41:58.937656000 -0800 now
+
+This outputs a future year because integer overflow happens when testing 
+on the SEASNet servers. The local linux file system uses 64 bit with the 
+most significant bit indicating future or past, but SEASnet uses a 32 bit 
+system and truncates the first 32 bits, which is why it returns a future 
+time.
+
+I entered in gdb using
+$ cd $tmp  
+$ gdb ~/coreutilsOld/bin/ls
+
+Then I found funtions that looked like they did some comparing using 
+(gdb) info functions 
+
+I set a breakpoint in compare_mtime which is the function that 
+compares the timestamps 
+
+(gdb) break compare_mtime 
+(gdb) run -lt wwi-armistice now now1
+Breakpoint 1, compare_mtime (a=0x6170d0, b=0x617230) at ls.c:2884
+2884    static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+(gdb) s
+cmp_mtime (a=0x6170d0, b=0x617230) at ls.c:2884
+2884    static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+(gdb) s
+timespec_cmp (a=0x6170d0, b=0x617230) at ../lib/timespec.h:48
+48        int diff = a.tv_sec - b.tv_sec;
+(gdb) s
+49        return diff ? diff : a.tv_nsec - b.tv_nsec;
+(gdb) s
+cmp_mtime (a=0x6170d0, b=0x617230) at ../lib/stat-time.h:121
+121       return STAT_TIMESPEC (st, st_mtim);
+(gdb) i r eax
+eax            0x5c5d3f27       1549614887
+(gdb) i r eax
+eax            0x8      8
+(gdb) i r eax
+eax            0xbc8e46f7       -1131526409
+
+Then I used continue to finish the program  
+
+It turns out that 8 is the difference in seconds between now1 and now
+and the return is supposed to be diff. However, the third time returns 
+a super negative number which seems very off, indicating overflow from 
+the subtraction in timespec.h 
+
+To fix this problem, I got rid of subtraction
+
+I went into the directory with the bug 
+$ cd ~/coreutils-with-bug/lib 
+
+I copied the file with the bug into my home directory 
+$ cp timespec.h ~/
+
+Then I made these edits to my copy of the file 
+timespec_cmp (struct timespec a, struct timespec b)
+{
+  if(a.tv_sec > b.tv_sec)
+    return 1;
+  else if(a.tv_sec < b.tv_sec)
+      return -1;
+  else
+    return a.tv_nsec - b.tv_nsec;
+}
+
+Then I created a patch.diff file using the diff function 
+$ diff -u coreutils-with-bug/lib/timespec.h timespec.h > coreutils-with-bug/patch.diff
+
+To create the ChangeLog 
+$ emacs 
+C-x 4-a 
+
+2019-02-08  Erica Xie  <ericax@lnxsrv04.seas.ucla.edu>
+
+        * lib/timespec.h (timespec_cmp):
+        To avoid integer overflow with old times,
+        use comparison instead of subtraction.
+
+Then I created a lab4.diff and copied the ChangeLog into it: 
+$ cp ChangeLog lab4.diff 
+
+Then I added the patch.diff file to the end of lab4.diff: 
+cat ~/coreutils-with-bug/patch.diff >> lab4.diff
+
+Then I changed all the timspec.h calls in the patch to lib/timspec.h 
+because I'm patching inside coreutils-with-bug 
+
+Then I patched the file in coreutils-with-bug 
+$ patch -p0 < ~/lab4.diff 
+patching file lib/timespec.h 
+
+Then I tested the patch in coreutils-with-bug
+
+$ TZ=UTC0 ~/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+-rw-r--r-- 1 ericax engugrad 0 2019-02-08 09:38:53.014906990 +0000 now1
+-rw-r--r-- 1 ericax engugrad 0 2019-02-08 09:38:46.872691180 +0000 now
+-rw-r--r-- 1 ericax engugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+
+Now it prints the correct output!!
+
+yay 

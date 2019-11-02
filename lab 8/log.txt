@@ -1,0 +1,350 @@
+Erica Xie
+404920875
+Lab 7 
+
+I plugged my beaglebone into my USB port and clicked on the START.htm. 
+Then I followed the instructions on the page. My steps did not turn green after
+I finished them and my drivers failed to install. I went to the BeagleBone 
+website and downloaded the newest drivers. Those installed correctly and I 
+clicked the link in the START.htm to see if my BeagleBone was connected to the 
+internet and the page loaded and said I was connected. 
+
+Then I used putty on the server 192.168.7.2 and tried to login with the 
+username root and the password Kennychan418 
+
+login as: root
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-06-14
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+root@192.168.7.2's password:
+Last login: Thu Mar  7 22:47:20 2019 from 192.168.7.3
+root@604736503:~# sudo connmanctl
+Error getting VPN connections: The name net.connman.vpn was not provided by aconnmanctl> enable wifi
+Error wifi: Already enabled
+connmanctl> scan wifi
+Scan completed for wifi
+connmanctl> services
+*AO UCLA_WEB             wifi_2cf7f1066368_55434c415f574542_managed_none
+*A  UCLA_WIFI_RES        wifi_2cf7f1066368_55434c415f574946495f524553_managedne
+    UCLA_SECURE_RES      wifi_2cf7f1066368_55434c415f5345435552455f524553_mand_ieee8021x
+    jwiz                 wifi_2cf7f1066368_6a77697a_managed_psk
+connmanctl> agent on
+Agent registered
+connmanctl> connect wifi_2cf7f1066368_55434c415f574542_managed_none
+Error /net/connman/service/wifi_2cf7f1066368_55434c415f574542_managed_none already connected
+connmanctl> quit
+
+Then I found the IP address of my BeagleBone under the wlan0 as inet addr: 
+inet addr:10.97.85.75 
+
+root@604736503:~# ifconfig
+SoftAp0   Link encap:Ethernet  HWaddr 98:5d:ad:c8:7f:38
+          inet addr:192.168.8.1  Bcast:192.168.8.255  Mask:255.255.255.0
+          inet6 addr: fe80::9a5d:adff:fec8:7f38/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:32 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:7600 (7.4 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:212 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:212 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1
+          RX bytes:18676 (18.2 KiB)  TX bytes:18676 (18.2 KiB)
+
+usb0      Link encap:Ethernet  HWaddr 98:5d:ad:c8:7f:30
+          inet addr:192.168.7.2  Bcast:192.168.7.255  Mask:255.255.255.0
+          inet6 addr: fe80::9a5d:adff:fec8:7f30/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:431 errors:0 dropped:4 overruns:0 frame:0
+          TX packets:201 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:54058 (52.7 KiB)  TX bytes:40329 (39.3 KiB)
+
+wlan0     Link encap:Ethernet  HWaddr 2c:f7:f1:06:63:68
+          inet addr:172.29.30.164  Bcast:172.29.31.255  Mask:255.255.252.0
+          inet6 addr: fe80::2ef7:f1ff:fe06:6368/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST DYNAMIC  MTU:1500  Metric:1
+          RX packets:66 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:153 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:12759 (12.4 KiB)  TX bytes:27688 (27.0 KiB)
+
+I then checked if everything is up to date and downloaded xauth and xvfb
+
+root@604736503:~# sudo apt-get update
+Get:1 http://repos.rcn-ee.com jessie InRelease [3060 B]
+Get:2 http://security.debian.org jessie/updates InRelease [44.9 kB]
+Get:3 http://repos.rcn-ee.com jessie/main armhf Packages [910 kB]
+Ign http://httpredir.debian.org jessie InRelease
+Get:4 http://httpredir.debian.org jessie-updates InRelease [145 kB]
+Get:5 https://deb.nodesource.com jessie InRelease [3913 B]
+Get:6 http://security.debian.org jessie/updates/main armhf Packages [789 kB]
+Get:7 https://deb.nodesource.com jessie/main armhf Packages [980 B]
+Hit http://httpredir.debian.org jessie Release.gpg
+Hit http://httpredir.debian.org jessie Release
+Get:8 http://httpredir.debian.org jessie-updates/main armhf Packages [23.1 kB]
+Get:9 http://security.debian.org jessie/updates/contrib armhf Packages [994 B]
+Get:10 http://httpredir.debian.org jessie-updates/contrib armhf Packages [20 B]
+Get:11 http://httpredir.debian.org jessie-updates/non-free armhf Packages [450 B]
+Get:12 http://security.debian.org jessie/updates/non-free armhf Packages [4421 B]
+Get:13 http://httpredir.debian.org jessie/main armhf Packages [8898 kB]
+Get:14 http://httpredir.debian.org jessie/contrib armhf Packages [44.3 kB]
+Get:15 http://httpredir.debian.org jessie/non-free armhf Packages [74.9 kB]
+Fetched 10.9 MB in 38s (285 kB/s)
+Reading package lists... Done
+
+root@604736503:~# sudo apt-get install xauth
+xauth is already the newest version.
+0 upgraded, 0 newly installed, 0 to remove and 256 not upgraded.
+
+root@604736503:~# sudo apt-get install xvfb
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following extra packages will be installed:
+  libfontenc1 libxfont1 libxkbfile1 x11-xkb-utils xfonts-base
+  xfonts-encodings xfonts-utils xserver-common
+Suggested packages:
+  xfs xserver
+The following NEW packages will be installed:
+  libfontenc1 libxfont1 libxkbfile1 x11-xkb-utils xfonts-base
+  xfonts-encodings xfonts-utils xserver-common xvfb
+0 upgraded, 9 newly installed, 0 to remove and 256 not upgraded.
+Need to get 11.3 MB of archives.
+After this operation, 15.2 MB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 http://httpredir.debian.org/debian/ jessie/main libfontenc1 armhf 1:1.1.2-1+b2 [21.6 kB]
+Get:2 http://httpredir.debian.org/debian/ jessie/main libxfont1 armhf 1:1.5.1-1+deb8u1 [118 kB]
+Get:3 http://httpredir.debian.org/debian/ jessie/main libxkbfile1 armhf 1:1.0.8-1 [70.3 kB]
+Get:4 http://httpredir.debian.org/debian/ jessie/main x11-xkb-utils armhf 7.7+1 [139 kB]
+Get:5 http://httpredir.debian.org/debian/ jessie/main xfonts-encodings all 1:1.0.4-2 [574 kB]
+Get:6 http://httpredir.debian.org/debian/ jessie/main xfonts-utils armhf 1:7.7+2 [69.0 kB]
+Get:7 http://httpredir.debian.org/debian/ jessie/main xfonts-base all 1:1.0.3 [6181 kB]
+Get:8 http://httpredir.debian.org/debian/ jessie/main xserver-common all 2:1.16.4-1+deb8u2 [1759 kB]
+Get:9 http://httpredir.debian.org/debian/ jessie/main xvfb armhf 2:1.16.4-1+deb8u2 [2383 kB]
+Fetched 11.3 MB in 26s (430 kB/s)
+
+Now that everything is updated, I can move on to the next step I use vim 
+to get into /etc/ssh/ssh_config and /etc/ssh/sshd_config files and set them
+to say yes for X11Forwarding. 
+
+Then I downloaded XMing on my laptop and then I downloaded Firefox onto 
+the beaglebone using 
+
+sudo apt-get install firefox-esr-l10n-en-gb
+
+To run firefox, just type firefox 
+
+
+
+****************
+SERVER SETUP
+****************
+
+I first check if I have the ssh server and client installed
+
+root@604736503:~# dpkg --get-selections | grep openssh
+openssh-client                                  install
+openssh-server                                  install
+openssh-sftp-server                             install
+
+Then I generate a key with the password: password123
+
+root@604736503:~# ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+/root/.ssh/id_rsa already exists.
+Overwrite (y/n)? y
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+61:b1:52:dc:d1:bf:07:19:5f:14:d9:a3:2f:a3:fc:c3 root@604736503.lasr.cs.ucla.edu
+The key's randomart image is:
++---[RSA 2048]----+
+|       .o..o   o=|
+|       ..o. . .oo|
+|      . +    ..+o|
+|       o .   .+ .|
+|        S     .o |
+|             o...|
+|          . o o. |
+|           o E   |
+|            ...  |
++-----------------+
+
+Then I created an account for the client on the server 
+username: mich
+password: pwd123
+
+root@604736503:~# sudo useradd -d /home/mich -m mich
+root@604736503:~# sudo passwd mich
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+
+Then I create a .ssh directory for the new user 
+
+root@604736503:~# cd /home/mich
+root@604736503:/home/mich# sudo mkdir .ssh
+
+Then I changed the ownership and permission of the .ssh directory to the 
+client
+
+root@604736503:/home/mich# sudo chown -R mich .ssh
+root@604736503:/home/mich# sudo chmod 700 .ssh
+
+Now my partner can log into this server as a client. 
+
+
+
+****************
+CLIENT STEPS 
+****************
+
+After me and my partner both completed the server setup steps above, I used 
+cd to get back to my main directory. 
+
+Then I generated a key for myself and saved it in /root/.ssh/authorized_keys
+password: password123
+
+root@604736503:~# ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): /root/.ssh/authorized_keys
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/authorized_keys.
+Your public key has been saved in /root/.ssh/authorized_keys.pub.
+The key fingerprint is:
+15:2e:11:bf:c3:d6:f5:ae:bb:c6:50:96:f7:f8:4e:a9 root@604736503.lasr.cs.ucla.edu
+The key's randomart image is:
++---[RSA 2048]----+
+|        o..      |
+|         + .     |
+|        . +   .. |
+|         + o .+..|
+|        S = .o oo|
+|         . .. ..o|
+|             o oo|
+|              +o.|
+|             E++.|
++-----------------+
+
+Then I gave my partner my IP address so she could ssh into my BeagleBone.
+
+I copied by public key to the server using 
+
+root@604736503:~# ssh-copy-id -i eri@172.29.29.12 
+
+This prompted me for my password which was password123 and added my key onto
+the machine. 
+
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+eri@172.29.29.12's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'eri@172.29.29.12'"
+and check to make sure that only the key(s) you wanted were added.
+
+To add the private key to the ssh-agent I first made sure the ssh-agent was
+running 
+
+root@604736503:~# exec ssh-agent bash
+
+Then I added the private key and entered by password again. 
+
+root@604736503:~# ssh-add
+Enter passphrase for /root/.ssh/id_rsa:
+Identity added: /root/.ssh/id_rsa (/root/.ssh/id_rsa)
+
+Then when I ssh'ed into the server again it automatically logged me in 
+without needing to enter a password. 
+
+root@604736503:~# ssh eri@172.29.29.12
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+I checked if I was on the right BeagleBone using ifconfig and sure enough
+my partner's IP address showed up. 
+
+Then I created a file on the server and typed hi. 
+
+$ vim test.txt
+
+My partner checked on her version of the server using 
+
+$ cd /home/eri 
+$ ls 
+test.txt 
+$ vim test.txt 
+
+and she saw the words I sent to her! 
+ 
+I did the same with her file and it worked. We now have each other's keys. 
+
+Then I tried the X11 forwarding and ran the command 
+
+root@604736503:~# ssh -X eri@172.29.29.12
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+Last login: Tue Mar  5 09:47:08 2019 from 172.29.30.164
+/usr/bin/xauth:  file /home/eri/.Xauthority does not exist
+$ firefox 
+
+and a window of the firefox browser popped up!! wow
+
+Then I exited and tried 
+
+root@604736503:~# ssh -Y eri@172.29.29.12
+Debian GNU/Linux 8
+
+BeagleBoard.org Debian Image 2016-10-20
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+
+default username:password is [debian:temppwd]
+
+Last login: Tue Mar  5 10:02:18 2019 from 172.29.30.164
+$ firefox
+
+and a window of firefox popped up again. 
+
+There were no obvious differences just by looking at what happens, but the -Y
+flag has security issues because it is trusted forwarding and therefore it 
+causes the remote machine to be treated as a trusted client. This means that 
+the clients can steal information from the server and get away with it. The -X
+flag however is untrusted forwarding and will error if any commands violate a 
+security setting.  
+

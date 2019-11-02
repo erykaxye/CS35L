@@ -1,0 +1,25 @@
+Erica Xie
+404920875
+Lab 7 
+
+1. If the other teams were observing all the bytes going across the network,
+my resulting network is still secure. The bytes are encryted by my public
+and private key and therefore, even if they could have access to my public 
+key, they would be hard-pressed to figure out my private key because it is
+stored on my computer and it is extremely hard to figure out a private key
+from a public key. 
+(1) If they were reading my keystrokes as well, it would still be secure 
+because our private key is generated differently each time we type in the 
+password.  
+(2) If they had physical control of a USB that I was booting off, then it
+would no longer be secure because they can just find the system files on 
+the USB drive and directly read our private key data and decrypt our 
+communications and log onto the server.   
+
+2. The gpg --verify only verifies if a target file and the detached 
+signatures match. But that only works if the person checking knows my public
+key already. Otherwise, someone else could replace my public key and create 
+the files and output the same detached signature and the command would still
+say that I created the files. 
+To fix this, everyone needs to know my public key so they can verify the key
+after downloading my files using hashing algorithms. 
